@@ -1,15 +1,20 @@
 package tddmicroexercises.tirepressuremonitoringsystem;
 
-import org.assertj.core.util.VisibleForTesting;
-
 public class Alarm
 {
     private final double LowPressureTreshold = 17;
     private final double HighPressureTreshold = 21;
 
-    Sensor sensor = new Sensor();
-
+    final ISensor sensor;
     boolean alarmOn = false;
+
+    public Alarm(ISensor sensor) {
+		this.sensor = sensor;
+	}
+
+	public Alarm() {
+		this(new Sensor());
+	}
 
     public void check()
     {
@@ -21,8 +26,7 @@ public class Alarm
         }
     }
 
-    @VisibleForTesting
-	protected double readPressure() {
+	private double readPressure() {
 		return sensor.popNextPressurePsiValue();
 	}
 

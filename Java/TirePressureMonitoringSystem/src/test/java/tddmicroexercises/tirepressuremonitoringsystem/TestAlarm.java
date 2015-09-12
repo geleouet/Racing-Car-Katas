@@ -6,9 +6,22 @@ import static org.assertj.core.api.Assertions.*;
 
 public class TestAlarm {
 
-    private static final int LOW_VALUE = 15;
+    private final class ISensorDouble implements ISensor {
+		private final int valueToReturn;
+
+		private ISensorDouble(int valueToReturn) {
+			this.valueToReturn = valueToReturn;
+		}
+
+		public double popNextPressurePsiValue() {
+			return valueToReturn;
+		}
+	}
+
+	private static final int LOW_VALUE = 15;
     private static final int HIGH_VALUE = 22;
 	private static final int NORMAL_VALUE = 18;
+	
 	@Test
     public void alarm_should_be_off_with_18() {
     	//GIVEN
@@ -49,11 +62,6 @@ public class TestAlarm {
     }
 
 	private Alarm systemUnderTestWithValue(final int valueToReturn) {
-		return new Alarm() {
-			@Override
-			protected double readPressure() {
-				return valueToReturn;
-			}
-		};
+		return new Alarm(new ISensorDouble(valueToReturn));
 	}
 }
